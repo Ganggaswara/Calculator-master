@@ -1,8 +1,7 @@
-const lightTheme = "styles/light.css";
-const darkTheme = "styles/dark.css";
 const sunIcon = "assets/SunIcon.svg";
 const moonIcon = "assets/MoonIcon.svg";
 const themeIcon = document.getElementById("theme-icon");
+const githubIcon = document.getElementById("github-icon");
 const res = document.getElementById("result");
 const toast = document.getElementById("toast");
 
@@ -18,20 +17,25 @@ function calculate(value) {
   }
 }
 
-// Swaps the stylesheet to achieve dark mode.
+// Toggles dark mode using Tailwind's class-based dark mode
 function changeTheme() {
-  const theme = document.getElementById("theme");
+  const html = document.documentElement;
   setTimeout(() => {
     toast.innerHTML = "Calculator";
   }, 1500);
-  if (theme.getAttribute("href") === lightTheme) {
-    theme.setAttribute("href", darkTheme);
-    themeIcon.setAttribute("src", sunIcon);
-    toast.innerHTML = "Dark Mode 🌙";
-  } else {
-    theme.setAttribute("href", lightTheme);
+  
+  if (html.classList.contains('dark')) {
+    // Switch to light mode
+    html.classList.remove('dark');
     themeIcon.setAttribute("src", moonIcon);
+    githubIcon.setAttribute("src", "assets/GitHubDark.svg");
     toast.innerHTML = "Light Mode ☀️";
+  } else {
+    // Switch to dark mode
+    html.classList.add('dark');
+    themeIcon.setAttribute("src", sunIcon);
+    githubIcon.setAttribute("src", "assets/GitHubLight.svg");
+    toast.innerHTML = "Dark Mode 🌙";
   }
 }
 
