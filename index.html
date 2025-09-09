@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
   <meta charset="utf-8" />
@@ -8,53 +8,60 @@
   <meta name="description" content="Simple Calculator With Dark Mode." />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/x-icon" href="assets/icon.ico">
-  <link rel="stylesheet" href="styles/dark.css" id="theme" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter','ui-sans-serif','system-ui','sans-serif']
+          }
+        }
+      }
+    }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
 </head>
 
-<body>
-  <div class="wrapper">
-    <div class="container">
-      <div class="header-container">
-        <h1 id="toast">Calculator</h1>
-        <div class="top-buttons">
-          <a href="https://github.com/ganggaswara">
-            <img src="assets/GitHubLight.svg" alt="Sun Icon" height="22.5" width="22.5" id="github-icon">
+<body class="min-h-screen bg-neutral-100 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100 font-sans">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-sm rounded-2xl border border-neutral-200/60 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/60 shadow-lg backdrop-blur-sm p-4 sm:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h1 id="toast" class="text-lg font-semibold">Calculator</h1>
+        <div class="flex items-center gap-2">
+          <a href="https://github.com/ganggaswara" class="inline-flex">
+            <img src="assets/GitHubLight.svg" alt="GitHub" height="22.5" width="22.5" class="dark:hidden">
+            <img src="assets/GitHubDark.svg" alt="GitHub" height="22.5" width="22.5" class="hidden dark:inline">
           </a>
-          <button type="button" onclick="changeTheme()" class="theme-button">
+          <button type="button" onclick="changeTheme()" class="rounded-md p-2 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 transition">
             <img src="assets/SunIcon.svg" alt="Theme Icon" height="19" width="19" id="theme-icon">
           </button>
         </div>
       </div>
-      <div class="first-row">
-        <input type="text" name="result" id="result" placeholder="0" readonly />
-        <input type="button" value="C" onclick="result.value=''" id="clear-button" />
+      <div class="flex gap-2">
+        <input type="text" name="result" id="result" placeholder="0" readonly class="flex-1 text-right text-3xl px-4 py-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <input type="button" value="C" onclick="result.value=''" id="clear-button" class="px-4 py-3 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium" />
       </div>
-      <div class="second-row">
-        <input type="button" value="1" onclick="liveScreen(1)" />
-        <input type="button" value="2" onclick="liveScreen(2)" />
-        <input type="button" value="3" onclick="liveScreen(3)" />
-        <input type="button" value="+" onclick="liveScreen('+')" />
-      </div>
-      <div class="third-row">
-        <input type="button" value="4" onclick=" liveScreen(4)" />
-        <input type="button" value="5" onclick=" liveScreen(5)" />
-        <input type="button" value="6" onclick=" liveScreen(6)" />
-        <input type="button" value="-" onclick="liveScreen('-')" />
-      </div>
-      <div class="fourth-row">
-        <input type="button" value="7" onclick="liveScreen(7)" />
-        <input type="button" value="8" onclick="liveScreen(8)" />
-        <input type="button" value="9" onclick=" liveScreen(9)" />
-        <input type="button" value="x" onclick="liveScreen('*')" />
-      </div>
-      <div class="fifth-row">
-        <input type="button" value="/" onclick="liveScreen('/')" />
-        <input type="button" value="0" onclick="liveScreen(0)" />
-        <input type="button" value="." onclick="liveScreen('.')" />
-        <input type="button" value="=" onclick="calculate(result.value)" />
+      <div class="grid grid-cols-4 gap-2">
+        <input type="button" value="1" onclick="liveScreen(1)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="2" onclick="liveScreen(2)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="3" onclick="liveScreen(3)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="+" onclick="liveScreen('+')" class="rounded-lg py-3 text-lg font-medium bg-indigo-500 hover:bg-indigo-600 text-white" />
+        <input type="button" value="4" onclick=" liveScreen(4)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="5" onclick=" liveScreen(5)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="6" onclick=" liveScreen(6)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="-" onclick="liveScreen('-')" class="rounded-lg py-3 text-lg font-medium bg-indigo-500 hover:bg-indigo-600 text-white" />
+        <input type="button" value="7" onclick="liveScreen(7)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="8" onclick="liveScreen(8)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="9" onclick=" liveScreen(9)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="x" onclick="liveScreen('*')" class="rounded-lg py-3 text-lg font-medium bg-indigo-500 hover:bg-indigo-600 text-white" />
+        <input type="button" value="/" onclick="liveScreen('/')" class="rounded-lg py-3 text-lg font-medium bg-indigo-500 hover:bg-indigo-600 text-white" />
+        <input type="button" value="0" onclick="liveScreen(0)" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="." onclick="liveScreen('.')" class="rounded-lg py-3 text-lg font-medium bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700" />
+        <input type="button" value="=" onclick="calculate(result.value)" class="rounded-lg py-3 text-lg font-semibold bg-emerald-500 hover:bg-emerald-600 text-white col-span-1" />
       </div>
     </div>
   </div>

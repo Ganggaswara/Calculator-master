@@ -18,18 +18,17 @@ function calculate(value) {
   }
 }
 
-// Swaps the stylesheet to achieve dark mode.
+// Toggles Tailwind's dark mode by switching the `dark` class on the root element.
 function changeTheme() {
-  const theme = document.getElementById("theme");
   setTimeout(() => {
     toast.innerHTML = "Calculator";
   }, 1500);
-  if (theme.getAttribute("href") === lightTheme) {
-    theme.setAttribute("href", darkTheme);
+  const root = document.documentElement;
+  root.classList.toggle("dark");
+  if (root.classList.contains("dark")) {
     themeIcon.setAttribute("src", sunIcon);
     toast.innerHTML = "Dark Mode 🌙";
   } else {
-    theme.setAttribute("href", lightTheme);
     themeIcon.setAttribute("src", moonIcon);
     toast.innerHTML = "Light Mode ☀️";
   }
