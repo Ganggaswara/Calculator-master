@@ -1,112 +1,137 @@
-const sunIcon = "assets/SunIcon.svg";
-const moonIcon = "assets/MoonIcon.svg";
-const themeIcon = document.getElementById("theme-icon");
-const githubIcon = document.getElementById("github-icon");
-const res = document.getElementById("result");
-const toast = document.getElementById("toast");
+$(document).ready(function() {
+    const sunIcon = "assets/SunIcon.svg";
+    const moonIcon = "assets/MoonIcon.svg";
+    const $themeIcon = $("#theme-icon");
+    const $githubIcon = $("#github-icon");
+    const $result = $("#result");
+    const $toast = $("#toast");
 
-function calculate(value) {
-  const calculatedValue = eval(value || null);
-  if (isNaN(calculatedValue)) {
-    res.value = "Can't divide 0 with 0";
-    setTimeout(() => {
-      res.value = "";
-    }, 1300);
-  } else {
-    res.value = calculatedValue;
-  }
-}
+    $("#clear-button").on("click", function() {
+        $result.val("");
+    });
 
-// Toggles dark mode using Tailwind's class-based dark mode
-function changeTheme() {
-  const html = document.documentElement;
-  setTimeout(() => {
-    toast.innerHTML = "Calculator";
-  }, 1500);
-  
-  if (html.classList.contains('dark')) {
-    // Switch to light mode
-    html.classList.remove('dark');
-    themeIcon.setAttribute("src", moonIcon);
-    githubIcon.setAttribute("src", "assets/GitHubDark.svg");
-    toast.innerHTML = "Light Mode ☀️";
-  } else {
-    // Switch to dark mode
-    html.classList.add('dark');
-    themeIcon.setAttribute("src", sunIcon);
-    githubIcon.setAttribute("src", "assets/GitHubLight.svg");
-    toast.innerHTML = "Dark Mode 🌙";
-  }
-}
+    // Add click handler for equals button
+    window.calculate = function() {
+        calculate($result.val());
+    };
 
-// Displays entered value on screen.
-function liveScreen(enteredValue) {
-  if (!res.value) {
-    res.value = "";
-  }
-  res.value += enteredValue;
-}
+    $("input[value='=']").on("click", function() {
+        calculate($result.val());
+    });
 
-//adding event handler on the document to handle keyboard inputs
-document.addEventListener("keydown", keyboardInputHandler);
+    function calculate(value) {
+        try {
+            value = value.replace(/[+\-*/]$/, '');
+            
+            // Validate input before calculation
+            if (!value || value.match(/[^0-9+\-*/.\s]/g)) {
+                throw new Error("Invalid input");
+            }
 
-//function to handle keyboard inputs
-function keyboardInputHandler(e) {
-  // to fix the default behavior of browser,
-  // enter and backspace were causing undesired behavior when some key was already in focus.
-  e.preventDefault();
-  //grabbing the liveScreen
+            // Safely evaluate the expression
+            const calculatedValue = Function('"use strict";return (' + value + ')')();
+            
+            if (isNaN(calculatedValue) || !isFinite(calculatedValue)) {
+                throw new Error("Invalid calculation");
+            }
 
-  //numbers
-  if (e.key === "0") {
-    res.value += "0";
-  } else if (e.key === "1") {
-    res.value += "1";
-  } else if (e.key === "2") {
-    res.value += "2";
-  } else if (e.key === "3") {
-    res.value += "3";
-  } else if (e.key === "4") {
-    res.value += "4";
-  } else if (e.key === "5") {
-    res.value += "5";
-  } else if (e.key === "6") {
-    res.value += "6";
-  } else if (e.key === "7") {
-    res.value += "7";
-  } else if (e.key === "7") {
-    res.value += "7";
-  } else if (e.key === "8") {
-    res.value += "8";
-  } else if (e.key === "9") {
-    res.value += "9";
-  }
+            const formattedResult = Number.isInteger(calculatedValue) 
+                ? calculatedValue 
+                : Number(calculatedValue.toFixed(8));
+            
+            $result.val(formattedResult);
+        } catch (error) {
+            $result.val("Error");
+            setTimeout(() => {
+                $result.val("");
+            }, 1300);
+        }
+    }
 
-  //operators
-  if (e.key === "+") {
-    res.value += "+";
-  } else if (e.key === "-") {
-    res.value += "-";
-  } else if (e.key === "*") {
-    res.value += "*";
-  } else if (e.key === "/") {
-    res.value += "/";
-  }
+    // Toggles dark mode using Tailwind's 
+    window.changeTheme = function() {
+        const $html = $('html');
+        setTimeout(() => {
+            $toast.html("Calculator");
+        }, 1500);
+        
+        if ($html.hasClass('dark')) {
+            // Switch to light mode
+            $html.removeClass('dark');
+            $themeIcon.attr("src", moonIcon);
+            $githubIcon.attr("src", "assets/GitHubDark.svg");
+            $toast.html("Light Mode ☀️");
+        } else {
+            // Switch to dark mode
+            $html.addClass('dark');
+            $themeIcon.attr("src", sunIcon);
+            $githubIcon.attr("src", "assets/GitHubLight.svg");
+            $toast.html("Dark Mode 🌙");
+        }
+    }
 
-  //decimal key
-  if (e.key === ".") {
-    res.value += ".";
-  }
+    // Displays entered value on screen.
+    window.liveScreen = function(enteredValue) {
+        let currentVal = $result.val();
+        
+        if (enteredValue === "." && currentVal.includes(".")) {
+            return;
+        }
+        
+        if ("+-*/".includes(enteredValue) && "+-*/".includes(currentVal.slice(-1))) {
+            return;
+        }
 
-  //press enter to see result
-  if (e.key === "Enter") {
-    calculate(result.value);
-  }
+        if (!currentVal) {
+            currentVal = "";
+        }
+        
+        $result.val(currentVal + enteredValue);
+    }
 
-  //backspace for removing the last input
-  if (e.key === "Backspace") {
-    const resultInput = res.value;
-    //remove the last element in the string
-    res.value = resultInput.substring(0, res.value.length - 1);
-  }
-}
+    // Handle keyboard inputs
+    $(document).on('keydown', function(e) {
+        e.preventDefault();
+
+        const key = e.key;
+        const numbers = "0123456789";
+        const operators = "+-*/";
+        const currentVal = $result.val();
+
+        // Handle numbers
+        if (numbers.includes(key)) {
+            liveScreen(key);
+        }
+
+        // Handle operators
+        if (operators.includes(key)) {
+            if (currentVal) {
+                liveScreen(key);
+            }
+        }
+
+        // Handle decimal
+        if (key === ".") {
+            // Prevent multiple decimal points in the same number
+            if (!currentVal.includes(".")) {
+                liveScreen(".");
+            }
+        }
+
+        // Handle enter
+        if (key === "Enter") {
+            calculate($result.val());
+        }
+
+        // Handle backspace
+        if (key === "Backspace") {
+            const resultInput = $result.val();
+            $result.val(resultInput.substring(0, resultInput.length - 1));
+        }
+        
+        // Handle escape key to clear
+        if (key === "Escape") {
+            $result.val("");
+        }
+    });
+});
